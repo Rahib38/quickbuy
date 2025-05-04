@@ -8,7 +8,8 @@ const createUser = async(payload:TUser)=>{
     console.log("create")
 
     const userData={
-        ...payload,
+        name:payload.name,
+        email:payload.email,
         role:Role.USER,
         password:hashedPassword
     }
