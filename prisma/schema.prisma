@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -9,17 +8,69 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
-  email     String     @unique
+  email     String   @unique
   password  String
-  role      UserStatus @default(MEMBER)
-  image String?
-  isActive Boolean
-  createdAt DateTime   @default(now())
+  role      Role     @default(USER)
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum UserStatus {
-  MEMBER
+model Product {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  fileUrl     String // Cloudinary file URL
+  imageUrl    String // Preview Image URL (optional)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orders      Order[]
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product     @relation(fields: [productId], references: [id])
+  productId String
+  status    OrderStatus @default(PENDING)
+  paymentId String?
+  createdAt DateTime    @default(now())
+  Payment   Payment[]
+}
+
+model Payment {
+  id            String          @id @default(uuid())
+  order         Order           @relation(fields: [orderId], references: [id])
+  orderId       String
+  amount        Float
+  provider      PaymentProvider
+  status        PaymentStatus
+  transactionId String          @unique
+  createdAt     DateTime        @default(now())
+}
+
+enum Role {
   ADMIN
+  USER
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum PaymentProvider {
+  STRIPE
+  SSLCOMMERZ
+}
+
+enum PaymentStatus {
+  INITIATED
+  COMPLETED
+  FAILED
 }
