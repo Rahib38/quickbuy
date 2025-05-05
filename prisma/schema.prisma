@@ -23,8 +23,7 @@ model Product {
   title       String
   description String
   price       Float
-  fileUrl     String // Cloudinary file URL
-  imageUrl    String // Preview Image URL (optional)
+  images      String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   orders      Order[]
