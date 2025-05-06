@@ -1,3 +1,4 @@
+import { prisma } from "../../config/prisma";
 import catchAsync from "../../utils/catchAsync";
 import { httpStatus } from "../../utils/httpStatus";
 import { sendImageToCloudinary } from "../../utils/imageUploder";
@@ -7,7 +8,7 @@ import { productService } from "./product.service";
 const createProduct = catchAsync(async (req, res) => {
   const payload = req.body;
   payload.images = [];
-console.log(payload,"payload")
+  console.log(payload, "payload");
 
   if (req.files && req.files instanceof Array) {
     const imagesUrls = await Promise.all(
@@ -24,7 +25,7 @@ console.log(payload,"payload")
     payload.images = imagesUrls;
   }
 
-  const result = await productService.createProduct(req.user,payload);
+  const result = await productService.createProduct(req.user, payload);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     message: "product create successfully",
@@ -33,6 +34,15 @@ console.log(payload,"payload")
 });
 
 
-export const productController ={
-    createProduct
-}
+const getAllProduct=catchAsync(async(req,res)=>{
+  const result = await productService.getAllProduct()
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: "Get all product successfully",
+    data: result,
+  });
+})
+
+export const productController = {
+  createProduct,getAllProduct
+};

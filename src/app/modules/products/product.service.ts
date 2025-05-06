@@ -1,9 +1,8 @@
-import { Product } from "@prisma/client";
 import { prisma } from "../../config/prisma";
 import { IProducts } from "./product.interface";
 
 const createProduct = async (user: unknown, payload: IProducts) => {
-  console.log(payload,"payload")
+  console.log(payload, "payload");
   const result = await prisma.product.create({
     data: {
       title: payload.title,
@@ -16,6 +15,12 @@ const createProduct = async (user: unknown, payload: IProducts) => {
   return result;
 };
 
+const getAllProduct = async () => {
+  const result = await prisma.product.findMany();
+  return result;
+};
+
 export const productService = {
   createProduct,
+  getAllProduct,
 };

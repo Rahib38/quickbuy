@@ -13,4 +13,6 @@ productRouter.post(
   },
   productController.createProduct
 );
+
+productRouter.get("/",productController.getAllProduct)
 export default productRouter
