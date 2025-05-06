@@ -15,4 +15,8 @@ productRouter.post(
 );
 
 productRouter.get("/",productController.getAllProduct)
+
+productRouter.get("/:id",productController.getSingleProduct)
+
+productRouter.delete("/:id",productController.deleteProduct)
 export default productRouter
