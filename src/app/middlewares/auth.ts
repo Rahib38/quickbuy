@@ -5,8 +5,17 @@ import AppError from "../errors/AppError";
 import catchAsync from "../utils/catchAsync";
 import { httpStatus } from "../utils/httpStatus";
 import { verifyToken } from "../utils/jwtHelper";
+import { JwtPayload } from "jsonwebtoken";
+import { Role } from "@prisma/client";
 
-export const auth = (...requiredRoles: string[]) => {
+// Custom JWT Payload interface
+interface MyJwtPayload extends JwtPayload {
+  id: string;
+  email: string;
+  role: Role;
+}
+
+export const auth = (...requiredRoles: Role[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -14,9 +23,10 @@ export const auth = (...requiredRoles: string[]) => {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized..!!");
     }
 
-    const decoded = verifyToken(token, config.jwt.jwt_secret as string);
+    // Type assertion with custom payload
+    const decoded = verifyToken(token, config.jwt.jwt_secret as string) as MyJwtPayload;
 
-    const { email, role } = decoded;
+    const { email, role, id } = decoded;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -25,13 +35,15 @@ export const auth = (...requiredRoles: string[]) => {
     });
 
     if (!user) {
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized..!");
+      throw new AppError(httpStatus.UNAUTHORIZED, "User not found");
     }
 
     if (requiredRoles.length && !requiredRoles.includes(role)) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized..!");
     }
-    req.user = { ...decoded, id: user.id };
+
+    // Attach to req.user with correct type
+    req.user = { id, email, role };
     next();
   });
 };
