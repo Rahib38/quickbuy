@@ -3,7 +3,7 @@ import { Server } from 'http';
 import app from './app';
 
 let server: Server;
-const port = 3001
+const port = 3000
 
 async function main() {
   try {
