@@ -51,7 +51,7 @@ const getSingleProduct = catchAsync(async (req, res) => {
   });
 });
 
-const deleteProduct = catchAsync(async(req,res)=>{
+const deleteProduct = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await productService.deleteProduct(id);
   sendResponse(res, {
@@ -59,11 +59,11 @@ const deleteProduct = catchAsync(async(req,res)=>{
     message: "Product delete successfully",
     data: result,
   });
-})
+});
 
 export const productController = {
   createProduct,
   getAllProduct,
   getSingleProduct,
-  deleteProduct
+  deleteProduct,
 };

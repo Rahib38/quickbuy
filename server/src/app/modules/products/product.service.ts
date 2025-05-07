@@ -20,27 +20,27 @@ const getAllProduct = async () => {
   return result;
 };
 
-const getSingleProduct = async(id:string)=>{
+const getSingleProduct = async (id: string) => {
   const result = await prisma.product.findUnique({
-    where:{
-      id
-    }
-  })
-  return result
-}
+    where: {
+      id,
+    },
+  });
+  return result;
+};
 
-const deleteProduct = async(id:string)=>{
+const deleteProduct = async (id: string) => {
   const result = await prisma.product.delete({
-    where:{
-      id
-    }
-  })
-  return result
-}
+    where: {
+      id,
+    },
+  });
+  return result;
+};
 
 export const productService = {
   createProduct,
   getAllProduct,
   getSingleProduct,
-  deleteProduct
+  deleteProduct,
 };
