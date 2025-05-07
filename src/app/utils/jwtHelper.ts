@@ -6,7 +6,7 @@ import { httpStatus } from "./httpStatus";
 type TAuthUser = {
   name: string;
   email: string;
-  image: string;
+  image?: string;
   role: Role;
 };
 
