@@ -60,10 +60,10 @@ const LoginFrom = ({
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await loginUser(data);
-      if (res.success) {
+      if (res?.success) {
         toast.success(res?.message);
       } else {
-        toast.error(res.message);
+        toast.error(res?.message);
       }
       console.log(res);
     } catch (error: any) {

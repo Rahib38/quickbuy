@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Menu } from "lucide-react";
 
 import {
@@ -22,6 +23,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import logo from '@/assets/logo.png'
+import Image from "next/image";
+import Link from "next/link";
 
 interface MenuItem {
   title: string;
@@ -32,9 +36,9 @@ interface MenuItem {
 }
 
 interface NavbarProps {
-  logo?: {
+  logos?: {
     url: string;
-    src: string;
+    src: any;
     alt: string;
     title: string;
   };
@@ -52,11 +56,11 @@ interface NavbarProps {
 }
 
 const Navbar = ({
-  logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
+  logos = {
+    url:"/",
+    src: logo,
     alt: "logo",
-    title: "Shadcnblocks.com",
+    title: "QuickBuy",
   },
 
   menu = [
@@ -72,18 +76,21 @@ const Navbar = ({
   },
 }: NavbarProps) => {
   return (
-    <section className="py-4 container mx-auto">
-      <div className="container">
+    <section className="sticky top-0 z-20 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-3">
+
+
+    <div className="py-4 container mx-auto ">
+      <div className="container ">
         {/* Desktop Menu */}
-        <nav className="hidden justify-between lg:flex">
+        <nav className="hidden justify-between lg:flex items-center">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
+            <Link href={logos.url} className="flex items-center gap-2">
+              <Image src={logos.src} className="h-20 w-auto object-contain" alt={logos.alt} height={80} width={80}/>
               <span className="text-lg font-semibold tracking-tighter">
-                {logo.title}
+                {logos.title}
               </span>
-            </a>
+            </Link>
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -106,9 +113,9 @@ const Navbar = ({
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
-            </a>
+            <Link href={logos.url} className="flex items-center gap-2">
+              <Image src={logos.src} className="h-20 w-auto object-contain" alt={logos.alt} height={80} width={80} />
+            </Link>
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -118,9 +125,9 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
-                      <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                    </a>
+                    <Link href={logos.url} className="flex items-center gap-2">
+                      <Image src={logos.src} className="h-20 w-auto object-contain" alt={logos.alt} height={80} />
+                    </Link>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
@@ -146,6 +153,7 @@ const Navbar = ({
           </div>
         </div>
       </div>
+    </div>
     </section>
   );
 };
