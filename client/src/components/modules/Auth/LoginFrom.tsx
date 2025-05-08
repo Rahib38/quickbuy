@@ -13,9 +13,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { registerUser } from "@/services/AuthService";
+import { loginUser } from "@/services/AuthService";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {zodResolver} from '@hookform/resolvers/zod'
+import { loginValidation } from "./loginValidation";
 
 interface LoginFromProps {
   heading?: string;
@@ -45,7 +47,9 @@ const LoginFrom = ({
   loginText = "You Dont't have an account?",
   loginUrl = "/register",
 }: LoginFromProps) => {
-  const form = useForm();
+  const form = useForm({
+        resolver: zodResolver(loginValidation)
+  });
 
   // const router = useRouter();
 
@@ -55,7 +59,7 @@ const LoginFrom = ({
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await registerUser(data);
+      const res = await loginUser(data);
       if (res.success) {
         toast.success(res?.message);
       } else {

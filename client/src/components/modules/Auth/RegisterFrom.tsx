@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { registerUser } from "@/services/AuthService";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { registerValidation } from "./registerValidation";
 
 interface RegisterFromProps {
   heading?: string;
@@ -45,7 +48,9 @@ const RegisterFrom = ({
   loginText = "Already have an account?",
   loginUrl = "/login",
 }: RegisterFromProps) => {
-  const form = useForm();
+  const form = useForm({
+    resolver: zodResolver(registerValidation)
+  });
 
   // const router = useRouter();
 
