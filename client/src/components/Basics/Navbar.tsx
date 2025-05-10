@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Menu } from "lucide-react";
+"use client"
+import { LogOut, Menu } from "lucide-react";
 
 import {
   Accordion,
@@ -26,6 +27,9 @@ import {
 import logo from '@/assets/logo.png'
 import Image from "next/image";
 import Link from "next/link";
+import { useUser } from "@/context/UserContext";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface MenuItem {
   title: string;
@@ -75,6 +79,7 @@ const Navbar = ({
     signup: { title: "Sign up", url: "register" },
   },
 }: NavbarProps) => {
+  const {user}=useUser()
   return (
     <section className="sticky top-0 z-20 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-3">
 
@@ -100,12 +105,44 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
+            {
+              user?   <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar>
+                    <AvatarImage src={user.image} alt="@shadcn" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <Link href="/profile">
+                      <DropdownMenuItem>Profile</DropdownMenuItem>
+                    </Link>
+                    <Link href={`/${user.role.toLowerCase()}/dashboard`}>
+                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                    </Link>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem
+                    // onClick={handleLogOut}
+                    className="text-red-600 font-semibold cursor-pointer"
+                  >
+                    Log out <LogOut className="text-red-600" />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>:      <Button asChild variant="outline" size="sm">
+              <Link href={auth.login.url}>{auth.login.title}</Link>
             </Button>
-            <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
-            </Button>
+            // <Button asChild size="sm">
+            //   <Link href={auth.signup.url}>{auth.signup.title}</Link>
+            // </Button>     
+            }
+ 
           </div>
         </nav>
 
